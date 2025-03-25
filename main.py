@@ -7,18 +7,10 @@ import torchvision.transforms as transforms
 import torchvision.models as models
 
 app = FastAPI()
-
-# Load the base model
 model = models.efficientnet_b0(pretrained=False)
-
-# Modify the classifier to match the checkpoint's output size
-num_classes = 2  # Adjust this to match the saved model
+num_classes = 2
 model.classifier[1] = torch.nn.Linear(in_features=1280, out_features=num_classes)
-
-# Load the state_dict
 model.load_state_dict(torch.load("notebook/efficientnet_b0_v2.pth", map_location=torch.device("cpu")))
-
-# Set to evaluation mode
 model.eval()
 
 transform = transforms.Compose([
